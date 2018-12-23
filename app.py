@@ -13,6 +13,11 @@ import pandas as pd
 app = dash.Dash(__name__)
 server = app.server
 
+colors = {
+    'background': '#FFFFE0',
+    'text': '#7FDBFF'
+}
+
 
 r = pd.read_csv('nama_10_gdp_1_Data.csv')
 
@@ -34,10 +39,13 @@ df = a.drop('index', axis=1)
 available_indicators = df['Indicator Name'].unique()
 countries = df['Country Name'].unique()
 
-app.layout = html.Div([
-    html.Div([
-    html.H1('Graph number 1'),
-    ]),
+app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+    html.H1(children='Graph number 1',
+        style={
+            'textAlign': 'center',
+            'color': colors['text']
+        }
+    ),
     
     html.Div([
 
@@ -47,7 +55,7 @@ app.layout = html.Div([
                 options=[{'label': i, 'value': i} for i in available_indicators],
                 value='Final consumption expenditure'
             ),
-        style={'width': '48%', 'display': 'inline-block'}),
+        style={'color':'blue','width': '48%', 'display': 'inline-block'}),
 
         html.Div(
             dcc.Dropdown(
@@ -55,7 +63,7 @@ app.layout = html.Div([
                 options=[{'label': i, 'value': i} for i in available_indicators],
                 value='Gross domestic product at market prices'
             )
-        ,style={'width': '48%', 'float': 'right', 'display': 'inline-block'}),
+        ,style={'color':'red','width': '48%', 'float': 'right', 'display': 'inline-block'}),
 
     dcc.Graph(id='indicator-graphic'),
 
@@ -68,9 +76,13 @@ app.layout = html.Div([
         marks={str(year): str(year) for year in df['Year'].unique()}
     ),
         
-    html.Div([
-    html.H1('Graph number 2'),
-    ]),
+    html.H1(children='Graph number 2', style={
+        'textAlign': 'center',
+        'color': colors['text']
+    }),
+        
+        
+        
     html.Div(
             dcc.Dropdown(
                 id='b_xaxis-column',
@@ -156,4 +168,3 @@ def b_update_graph(b_xaxis_column_name, b_yaxis_column_name):
 
 if __name__ == '__main__':
     app.run_server()    
-
